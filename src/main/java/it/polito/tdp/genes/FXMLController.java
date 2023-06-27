@@ -5,6 +5,7 @@
 package it.polito.tdp.genes;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.genes.model.Model;
@@ -38,12 +39,50 @@ public class FXMLController {
 
     @FXML
     void doContaArchi(ActionEvent event) {
-
+    	String input = this.txtSoglia.getText();
+    	if(input=="") {
+    		this.txtResult.appendText("Inserire un valore soglia.");
+    		return;
+    	}
+    	try {
+    		double s = Double.parseDouble(input);
+    		if(s>=model.getMin() && s<=model.getMax()) {
+    			this.txtResult.appendText("Soglia: "+s+" --> Maggiori "+model.getSup(s)+", minori "+model.getInf(s)+"\n");
+    		}
+    		else {
+    			this.txtResult.setText("Inserire un valore tra il minimo e il massimo.");
+    			return;
+    		}
+    	} catch (NumberFormatException e) {
+    		this.txtResult.setText("Il valore immesso non è valido.");
+    		return;
+    	}
     }
 
     @FXML
     void doRicerca(ActionEvent event) {
-
+    	String input = this.txtSoglia.getText();
+    	if(input=="") {
+    		this.txtResult.appendText("Inserire un valore soglia.");
+    		return;
+    	}
+    	try {
+    		double s = Double.parseDouble(input);
+    		if(s>=model.getMin() && s<=model.getMax()) {
+    			List<Integer> l = model.calcolaCammino(s);
+				this.txtResult.appendText("Cammino creato.\n");
+    			for(Integer i : l) {
+    				this.txtResult.appendText(i.toString()+"\n");
+    			}
+    		}
+    		else {
+    			this.txtResult.setText("Inserire un valore tra il minimo e il massimo.");
+    			return;
+    		}
+    	} catch (NumberFormatException e) {
+    		this.txtResult.setText("Il valore immesso non è valido.");
+    		return;
+    	}
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
@@ -57,6 +96,8 @@ public class FXMLController {
 
 	public void setModel(Model model) {
 		this.model = model ;
-		
+		model.creaGrafo();
+		this.txtResult.setText("Grafo creato: "+model.getVerticiSize()+" vertici, "+model.getArchiSize()+" archi\n");
+		this.txtResult.appendText("Peso minimo = "+model.getMin()+", peso massimo = "+model.getMax()+"\n");
 	}
 }
