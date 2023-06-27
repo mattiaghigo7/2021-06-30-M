@@ -44,14 +44,25 @@ public class Model {
 			}
 			else if(parziale.size()>0 && !parziale.contains(i)) {
 				Integer momentaneo = parziale.get(parziale.size()-1);
-				DefaultWeightedEdge e = this.grafo.getEdge(momentaneo,i);
-				if(!parziale.contains(i)) {
-					if(grafo.getEdgeWeight(e)>=s) {
-						parziale.add(i);
-						ricorsione(parziale,this.getAdiacenti(i),s);
-						parziale.remove(i);
+				for(Coppia c : this.archi) {
+					if((c.getC2().equals(momentaneo) && c.getC1().equals(i))) {
+						if(!parziale.contains(i)) {
+							if(c.getN()>=s) {
+								parziale.add(i);
+								ricorsione(parziale,this.getAdiacenti(i),s);
+								parziale.remove(i);
+							}
+						}
 					}
 				}
+//				DefaultWeightedEdge e = this.grafo.getEdge(momentaneo,i);
+//				if(!parziale.contains(i)) {
+//					if(grafo.getEdgeWeight(e)>=s) {
+//						parziale.add(i);
+//						ricorsione(parziale,this.getAdiacenti(i),s);
+//						parziale.remove(i);
+//					}
+//				}
 			}
 		}
 	}
